@@ -96,6 +96,7 @@ setTimeout(()=>{
 
 const eventoCambio = new Event('change');
 
+const botonGuardar  = document.getElementsByTagName("clasificador-app")[0].getElementsByTagName("ul")[3].getElementsByTagName("button")[0] 
 const fijarTotal = () => {
 
     Array.from(document.getElementsByClassName("clasificador-deduccion")).map((select)=>{
@@ -104,6 +105,7 @@ const fijarTotal = () => {
         //Notificar con un evento sobre el cambio, para que angular se ejecute
         select.dispatchEvent(eventoCambio);
     })
+    botonGuardar.click();
 }
 
 
@@ -111,12 +113,23 @@ const paginacion = document.getElementById("modalEgresoList");
 //TODO verificar que la pagina sea una coleccion
 const listaPaginas = paginacion.getElementsByClassName("pagination")[0].getElementsByTagName("li");
 
-const navegarPaginacion = () =>{
-    Array.from(listaPaginas).map((li)=>{
-        //TODO DETERMINAR UNA FORMA DE SABER QUE LA PAGINA YA ESTA CARGADA
-        setTimeout(() => {
 
-            li.click();
-        },3000)
-    })    
+const moverPagina = (lista) =>{
+    fijarTotal()
+   let elemento = lista.shift(); 
+    if(elemento){
+        elemento = elemento.getElementsByTagName("a")[0];
+        console.log(elemento)
+        setTimeout(() =>{
+            elemento.click();
+            moverPagina(lista);
+        },5000) 
+    }
 }
+
+const navegarPaginacion = () =>{
+    //TODO DETERMINAR UNA FORMA DE SABER QUE LA PAGINA YA ESTA CARGADA
+    let lista = Array.from(listaPaginas);
+    moverPagina(lista);
+}
+
